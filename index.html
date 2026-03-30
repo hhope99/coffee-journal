@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- PWA -->
+ <meta name = "mobile-web-app-capable" content = "yes">
+ <meta name = "apple-mobile-web-app-capable" content = "yes">
+ <meta name = "apple-mobile-web-app-status-bar-style" content = "black-translucent">
+ <meta name = "theme-color" content = "#2d1b0e">
+ <link rel="apple-touch-icon" href="icon-192.png">
+ <link rel="icon" type = "image/png" sizes = "192x192" href="icon-192.png">
+ <link rel="manifest" href="manifest.webmanifest">
+
 <title>The Chemex Chronicles</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -2556,5 +2566,110 @@ const heroObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0 });
 heroObserver.observe(document.querySelector('.hero'));
 </script>
+
+<!-- ── INSTALL BANNER (Android / Chrome) ── -->
+<div id="install-banner" style="
+  position:fixed; bottom:0; left:0; right:0; z-index:2100;
+  background:#2d1b0e; padding:16px 20px;
+  display:flex; align-items:center; gap:14px;
+  transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 -4px 24px rgba(0,0,0,0.35);
+">
+  <img src="icon-192.png" alt="" style="width:44px;height:44px;border-radius:10px;flex-shrink:0;">
+  <div style="flex:1;min-width:0;">
+    <div style="font-family:'Playfair Display',serif;font-size:15px;color:#f5ede0;font-weight:700;line-height:1.2;">Add to Home Screen</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,223,192,0.5);margin-top:3px;">Install for offline use</div>
+  </div>
+  <button id="install-btn" style="
+    background:#c17f3a;border:none;color:white;
+    padding:10px 18px;border-radius:2px;
+    font-family:'Space Mono',monospace;font-size:10px;
+    letter-spacing:0.15em;text-transform:uppercase;
+    cursor:pointer;white-space:nowrap;flex-shrink:0;
+  ">Install</button>
+  <button id="install-dismiss" style="
+    background:none;border:none;color:rgba(240,223,192,0.4);
+    font-size:20px;cursor:pointer;padding:4px 8px;line-height:1;flex-shrink:0;
+  ">✕</button>
+</div>
+<style>#install-banner.visible { transform: translateY(0); }</style>
+
+<!-- ── IOS INSTALL HINT ── -->
+<div id="ios-hint" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:2050;
+  background:#2d1b0e;padding:18px 20px;text-align:center;
+  box-shadow:0 -4px 24px rgba(0,0,0,0.35);">
+  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;
+    text-transform:uppercase;color:rgba(240,223,192,0.7);line-height:2;">
+    To install on iPhone: tap <strong style="color:#c17f3a;">Share ↑</strong> then
+    <strong style="color:#c17f3a;">"Add to Home Screen"</strong>
+  </p>
+  <button onclick="this.parentElement.style.display='none';localStorage.setItem('ios_hint_dismissed','1');"
+    style="margin-top:4px;background:none;border:1px solid rgba(255,255,255,0.15);
+    color:rgba(240,223,192,0.4);font-family:'Space Mono',monospace;font-size:9px;
+    letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:2px;cursor:pointer;">
+    Dismiss
+  </button>
+</div>
+
+<script>
+// ── SERVICE WORKER ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('[Chemex PWA] SW registered:', r.scope))
+      .catch(e => console.warn('[Chemex PWA] SW registration failed:', e));
+  });
+}
+
+// ── ANDROID / CHROME INSTALL PROMPT ──
+let deferredPrompt = null;
+const installBanner  = document.getElementById('install-banner');
+const installBtn     = document.getElementById('install-btn');
+const installDismiss = document.getElementById('install-dismiss');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('pwa_install_dismissed')) {
+    setTimeout(() => { if (installBanner) installBanner.classList.add('visible'); }, 3500);
+  }
+});
+
+installBtn && installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    installBanner.classList.remove('visible');
+    localStorage.setItem('pwa_install_dismissed', '1');
+  }
+  deferredPrompt = null;
+});
+
+installDismiss && installDismiss.addEventListener('click', () => {
+  installBanner.classList.remove('visible');
+  localStorage.setItem('pwa_install_dismissed', '1');
+});
+
+window.addEventListener('appinstalled', () => {
+  if (installBanner) installBanner.classList.remove('visible');
+  deferredPrompt = null;
+});
+
+// ── IOS INSTALL HINT ──
+(function() {
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone;
+  const dismissed = localStorage.getItem('ios_hint_dismissed');
+  if (isIos && !isStandalone && !dismissed) {
+    setTimeout(() => {
+      const el = document.getElementById('ios-hint');
+      if (el) el.style.display = 'block';
+    }, 4500);
+  }
+})();
+</script>
+
 </body>
 </html>
