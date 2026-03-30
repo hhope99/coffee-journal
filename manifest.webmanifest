@@ -1,0 +1,26 @@
+{
+  "name": "The Chemex Chronicles",
+  "short_name": "Chemex",
+  "description": "Shane's guide to the perfect Chemex cup — bean profiles, brew ratios, pour schedules, and cupping scoresheets.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#faf4eb",
+  "theme_color": "#2d1b0e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "lifestyle", "utilities"],
+  "screenshots": []
+}
