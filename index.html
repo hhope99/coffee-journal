@@ -2213,7 +2213,13 @@ function openModal(id) {
   document.getElementById('modal-roaster').textContent = p.roaster || 'Unknown roaster';
 
   // Key stats
-  const grindDescriptors = { 1:'Fine',2:'Fine',3:'Fine',4:'Fine',5:'Fine',6:'Fine',7:'Fine',8:'Fine',9:'Medium-Fine',10:'Medium-Fine',11:'Medium-Fine',12:'Medium-Fine',13:'Medium-Fine',14:'Medium-Fine',15:'Medium',16:'Medium',17:'Medium',18:'Medium',19:'Medium',20:'Medium-Coarse',21:'Medium-Coarse',22:'Medium-Coarse',23:'Medium-Coarse',24:'Medium-Coarse',25:'Medium-Coarse',26:'Medium-Coarse',27:'Medium-Coarse',28:'Medium-Coarse',29:'Coarse',30:'Coarse',31:'Coarse',32:'Coarse',33:'Coarse',34:'Coarse',35:'Extra Coarse',36:'Extra Coarse',37:'Extra Coarse',38:'Extra Coarse',39:'Extra Coarse',40:'Extra Coarse' };
+  const grindDescriptors = { 0.0:'Fine',0.5:'Fine',1.0:'Fine',1.5:'Fine',2.0:'Medium-Fine',
+    2.5:'Medium-Fine',3.0:'Medium-Fine',
+    3.5:'Medium',4.0:'Medium',4.5:'Medium',
+    5.0:'Medium-Coarse',5.5:'Medium-Coarse',6.0:'Medium-Coarse',
+    6.5:'Coarse',7.0:'Coarse',7.5:'Coarse',8.0:'Coarse',
+    8.5:'Extra Coarse',9.0:'Extra Coarse'
+};
   const fields = [
     { label: 'Origin',     val: p.origin },
     { label: 'Roast',      val: p.roast },
