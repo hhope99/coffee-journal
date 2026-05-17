@@ -1677,7 +1677,7 @@
             </div>
             <input type="range" id="grind-setting" min="0.0" max="9.0" value="2.4" step="0.1" oninput="updateGrindDisplay()">
             <div class="grind-value-display">
-              <span class="grind-number" id="grind-number">2.4</span>
+              <span class="grind-number" id="grind-number">6.5</span>
               <div>
                 <div class="grind-descriptor" id="grind-descriptor">Medium-Coarse</div>
                   <div class="grind-chemex-hint" id="grind-chemex-hint">✓ Chemex range: 4.5–8.0</div>
@@ -2034,13 +2034,13 @@ function updateTempHint() {
 
 // ── GRIND DISPLAY ─────────────────────────────────────────────────────
 function updateGrindDisplay() {
-  const val = parseInt(document.getElementById('grind-setting').value);
+  const val = parseFloat(document.getElementById('grind-setting').value);
   document.getElementById('grind-number').textContent = val;
   let descriptor, hint;
   if      (val <= 1.5)  { descriptor = 'Fine';               hint = 'Espresso range'; }
   else if (val <= 3.0) { descriptor = 'Medium-Fine';         hint = 'Pour-over / Aeropress range'; }
   else if (val <= 4.5) { descriptor = 'Medium';              hint = 'Below Chemex range'; }
-  else if (val <= 6.0) { descriptor = 'Medium-Coarse';       hint = '✓ Chemex range: 4.5–8.0'; }
+  else if (val <= 8.0) { descriptor = 'Medium-Coarse';       hint = '✓ Chemex range: 4.5–8.0'; }
   else if (val <= 8.0) { descriptor = 'Coarse';              hint = 'French Press range'; }
   else                { descriptor = 'Extra Coarse';        hint = 'Cold brew range'; }
   document.getElementById('grind-descriptor').textContent = descriptor;
