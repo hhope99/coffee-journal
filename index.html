@@ -1672,15 +1672,15 @@
           <label for="grind-setting">Grind Setting (clicks)</label>
           <div class="grind-slider-wrap">
             <div class="grind-slider-labels">
-              <span>Fine (1)</span>
-              <span>Coarse (40)</span>
+              <span>Fine (0.0)</span>
+              <span>Coarse (9.0)</span>
             </div>
-            <input type="range" id="grind-setting" min="1" max="40" value="24" step="1" oninput="updateGrindDisplay()">
+            <input type="range" id="grind-setting" min="0.0" max="9.0" value="2.4" step="0.1" oninput="updateGrindDisplay()">
             <div class="grind-value-display">
-              <span class="grind-number" id="grind-number">24</span>
+              <span class="grind-number" id="grind-number">2.4</span>
               <div>
                 <div class="grind-descriptor" id="grind-descriptor">Medium-Coarse</div>
-                <div class="grind-chemex-hint" id="grind-chemex-hint">✓ Chemex range: 20–28</div>
+                  <div class="grind-chemex-hint" id="grind-chemex-hint">✓ Chemex range: 4.5–8.0</div>
               </div>
             </div>
           </div>
@@ -2037,11 +2037,11 @@ function updateGrindDisplay() {
   const val = parseInt(document.getElementById('grind-setting').value);
   document.getElementById('grind-number').textContent = val;
   let descriptor, hint;
-  if      (val <= 8)  { descriptor = 'Fine';               hint = 'Espresso range'; }
-  else if (val <= 14) { descriptor = 'Medium-Fine';         hint = 'Pour-over / Aeropress range'; }
-  else if (val <= 19) { descriptor = 'Medium';              hint = 'Below Chemex range'; }
-  else if (val <= 28) { descriptor = 'Medium-Coarse';       hint = '✓ Chemex range: 20–28'; }
-  else if (val <= 34) { descriptor = 'Coarse';              hint = 'French Press range'; }
+  if      (val <= 1.5)  { descriptor = 'Fine';               hint = 'Espresso range'; }
+  else if (val <= 3.0) { descriptor = 'Medium-Fine';         hint = 'Pour-over / Aeropress range'; }
+  else if (val <= 4.5) { descriptor = 'Medium';              hint = 'Below Chemex range'; }
+  else if (val <= 6.0) { descriptor = 'Medium-Coarse';       hint = '✓ Chemex range: 4.5–8.0'; }
+  else if (val <= 8.0) { descriptor = 'Coarse';              hint = 'French Press range'; }
   else                { descriptor = 'Extra Coarse';        hint = 'Cold brew range'; }
   document.getElementById('grind-descriptor').textContent = descriptor;
   const hintEl = document.getElementById('grind-chemex-hint');
